@@ -10,4 +10,10 @@
 
 # 실행방법
 
-(작성중...)
+https://scarecrow1992.github.io/johan-transformation/
+
+위 링크에서 실행 가능
+
+또는
+
+VSC로 프로젝트를 연후 index.html 파일을 라이브서버로 열어주세요!
