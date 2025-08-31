@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="src/index.js" defer></script>
+</head>
+
+<body>
+  <div id="transformation">
+    <div class= "canvas-wrapper">
+      <canvas id="transformation-canvas"></canvas>
+    </div>
+    <div id="transformation-controller">
+      <div class="transformation-controller-section">
+        <p>Controller</p>
+      </div>
+
+      <div class="transformation-controller-section">
+        <div class="transformation-point-coordinates">
+          <p>Point Coordinates</p>
+          <div class="point-block">
+            <p>1. Left-Top:</p>
+            <p id = "point-left-top">0, 0</p>
+          </div>
+          <div class="point-block">
+            <p>2. Right-Top:</p>
+            <p id = "point-right-top">0, 0</p>
+          </div>
+          <div class="point-block">
+            <p>3. Right-Bottom:</p>
+            <p id = "point-right-bottom">0, 0</p>
+          </div>
+          <div class="point-block">
+            <p>4. Left-Bottom:</p>
+            <p id = "point-left-bottom">0, 0</p>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="transformation-controller-section">
+        <p>Position</p>
+
+        <div class="coordinate-input-container-set">
+          <div class="coordinate-input-container">
+            <p>X</p>
+            <input value=0 id="input-position-x" class="number-input" type="number" step="0.01">
+          </div>
+          <div class="coordinate-input-container">
+            <p>Y</p>
+            <input value=0 id="input-position-y" class="number-input" type="number" step="0.01">
+          </div>
+        </div>
+      </div>
+      <div class="transformation-controller-section">
+        <p>Rotation</p>
+        <input value=0 id="input-rotation" class="number-input" type="number" step="0.01">
+      </div>
+
+      <div id="transformation-controller-pivot" class="transformation-controller-section">
+        <p>Pivot</p>
+        <div class="coordinate-input-container-set">
+          <div class="coordinate-input-container">
+            <p>X</p>
+            <input value=0 id="input-pivot-x" class="number-input" type="number" step="0.01">
+          </div>
+          <div class="coordinate-input-container">
+            <p>Y</p>
+            <input value=0 id="input-pivot-y" class="number-input" type="number" step="0.01">
+          </div>
+        </div>
+      </div>
+      <button id="button-apply-transform">적용</button>
+    </div>
+  </div>
+</body>
+
+</html>
