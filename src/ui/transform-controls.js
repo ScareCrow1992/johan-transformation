@@ -82,7 +82,6 @@ export default function InitTransformControls(model_instance, action_render){
 
     let value = event.target.value;
     let num = parseInt(value, 10);
-    console.log(num);
 
     if(isNaN(num)){
       event.target.value = "0";
