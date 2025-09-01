@@ -9,12 +9,14 @@ export default class MainAxis {
     this.axis_y = new Axis_Y();
   }
 
-  On_ScreenSizeChanged(width, height) {
+  On_ScreenSizeChanged(width, height, org_matrix) {
     this.center_x = width / 2;
     this.center_y = height / 2;
 
-    this.axis_x.SetScreenData(width, height);
-    this.axis_y.SetScreenData(width, height);
+    // console.log(new DOMMatrix(org_matrix).transformPoint(new DOMPoint(1, 0)));
+
+    this.axis_x.SetScreenData(width, height, new DOMMatrix(org_matrix));
+    this.axis_y.SetScreenData(width, height, new DOMMatrix(org_matrix));
 
     // this.axis_x.SetRange(new Point(0, this.center_y), new Point(width, this.center_y));
     // this.axis_y.SetRange(new Point(this.center_x, height), new Point(this.center_x, 0));
@@ -47,12 +49,14 @@ class Axis_X {
     this.width = 0;
     this.height = 0;
     this.unit_length = 0;
+    this.org_matrix = new DOMMatrix([1, 0, 0, -1, 0, 0]);
     this.SetUnitLength(50);
   }
 
-  SetScreenData(width, height) {
+  SetScreenData(width, height, org_matrix) {
     this.width = width;
     this.height = height;
+    this.org_matrix = org_matrix;
   }
 
   SetUnitLength(unit_length) {
@@ -84,37 +88,70 @@ class Axis_X {
     ctx.lineWidth = 1;
     ctx.strokeStyle = "gray"
 
-    let drawing_pos_x = this.width / 2;
-    let label_number = 0;
 
     ctx.textAlign = "center"
     const bias = 5;
-    while (drawing_pos_x < this.width) {
+
+    let size_ = Math.sqrt(this.org_matrix.a * this.org_matrix.a + this.org_matrix.b * this.org_matrix.b)
+    const mat_rightSide = new DOMMatrix(this.org_matrix);
+    const mat_leftSide = new DOMMatrix(this.org_matrix);
+
+    let drawing_pos_x = this.width / 2 / size_;
+    let label_number = 0;
+    // console.log(size_x);
+    // console.log(this.org_matrix);
+
+    while (drawing_pos_x < this.width / size_) {
       drawing_pos_x += this.unit_length;
       label_number += this.unit_length;
-
       const label_number_txt = label_number.toString();
+
+      // console.log(this.org_matrix);
+
       let textWidth = ctx.measureText(label_number_txt).width;
-      let textHeight = ctx.measureText(label_number_txt).actualBoundingBoxAscent + 
-                        ctx.measureText(label_number_txt).actualBoundingBoxDescent;
-      
-                        
+      let textHeight = ctx.measureText(label_number_txt).actualBoundingBoxAscent +
+        ctx.measureText(label_number_txt).actualBoundingBoxDescent;
+
       // right side
+      mat_rightSide.translateSelf(this.unit_length, 0);
+      ctx.setTransform(mat_rightSide);
+
+      // 점선 출력
       ctx.beginPath();
-      ctx.moveTo(drawing_pos_x, this.height / 2);
-      ctx.lineTo(drawing_pos_x, this.height / 2 - bias);
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, -bias / size_);
       ctx.stroke();
-      const text_x = drawing_pos_x;
-      const text_y = this.height / 2 + 2 * textHeight;
-      ctx.fillText(label_number_txt, text_x, text_y);
+      // const text_x = drawing_pos_x;
+      // const text_y = this.height / 2 + 2 * textHeight;
+
+      // 라벨 출력
+      const tmp_mat = mat_rightSide.scale(1 / size_, -1 / size_);
+      ctx.setTransform(tmp_mat);
+      ctx.fillText(label_number_txt, 0, bias / size_ + textHeight);
+
 
       // left side
-      const mirrored_text_x = this.width - text_x;
+      mat_leftSide.translateSelf(-this.unit_length, 0);
+      ctx.setTransform(mat_leftSide);
+
+      // 점선 출력
       ctx.beginPath();
-      ctx.moveTo(mirrored_text_x, this.height / 2);
-      ctx.lineTo(mirrored_text_x, this.height / 2 - bias);
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, -bias / size_);
       ctx.stroke();
-      ctx.fillText((-label_number).toString(), mirrored_text_x, text_y);
+
+      // 라벨 출력
+      const tmp_left_mat = mat_leftSide.scale(1 / size_, -1 / size_);
+      ctx.setTransform(tmp_left_mat);
+      ctx.fillText(-label_number_txt, 0, bias / size_ + textHeight);
+
+
+      // const mirrored_text_x = this.width - text_x;
+      // ctx.beginPath();
+      // ctx.moveTo(mirrored_text_x, this.height / 2);
+      // ctx.lineTo(mirrored_text_x, this.height / 2 - bias);
+      // ctx.stroke();
+      // ctx.fillText((-label_number).toString(), mirrored_text_x, text_y);
     }
 
 
@@ -132,12 +169,14 @@ class Axis_Y {
     this.width = 0;
     this.height = 0;
     this.unit_length = 0;
+    this.org_matrix = new DOMMatrix([1, 0, 0, -1, 0, 0]);
     this.SetUnitLength(50);
   }
 
-  SetScreenData(width, height) {
+  SetScreenData(width, height, org_matrix) {
     this.width = width;
     this.height = height;
+    this.org_matrix = org_matrix;
   }
 
   SetUnitLength(unit_length) {
@@ -168,37 +207,54 @@ class Axis_Y {
     ctx.lineWidth = 1;
     ctx.strokeStyle = "gray"
 
-    let drawing_pos_y = this.height / 2;
-    let label_number = 0;
 
     ctx.textAlign = "right"
-    const bias = 5;
-    while (drawing_pos_y < this.height) {
+    const bias = 3;
+
+    let size_ = Math.sqrt(this.org_matrix.c * this.org_matrix.c + this.org_matrix.d * this.org_matrix.d)
+    const mat_upSide = new DOMMatrix(this.org_matrix);
+    const mat_downSide = new DOMMatrix(this.org_matrix);
+
+
+    let drawing_pos_y = this.height / 2 / size_;
+    let label_number = 0;
+
+    while (drawing_pos_y < this.height / size_) {
       drawing_pos_y += this.unit_length;
       label_number += this.unit_length;
 
       const label_number_txt = label_number.toString();
-      let textWidth = ctx.measureText(label_number_txt).width;
-      let textHeight = ctx.measureText(label_number_txt).actualBoundingBoxAscent + 
-                        ctx.measureText(label_number_txt).actualBoundingBoxDescent;
-      
-                        
+
       // down side
+      mat_downSide.translateSelf(0, -this.unit_length);
+      ctx.setTransform(mat_downSide);
+
+      // 점선 출력
       ctx.beginPath();
-      ctx.moveTo(this.width / 2 - bias, drawing_pos_y);
-      ctx.lineTo(this.width / 2, drawing_pos_y);
+      ctx.moveTo(-bias / size_, 0);
+      ctx.lineTo(0, 0);
       ctx.stroke();
-      const text_x = (this.width / 2) - bias * 2;
-      const text_y = drawing_pos_y + textHeight / 2;
-      ctx.fillText((-label_number).toString(), text_x, text_y);
+
+      // 라벨 출력
+      const tmp_down_mat = mat_downSide.scale(1 / size_, -1 / size_);
+      ctx.setTransform(tmp_down_mat);
+      ctx.fillText(-label_number_txt, - bias / size_, 0);
 
       // up side
-      const mirrored_text_y = this.height - drawing_pos_y;
+      mat_upSide.translateSelf(0, this.unit_length, 0);
+      ctx.setTransform(mat_upSide);
+
+      // 점선 출력
+      // const mirrored_text_y = this.height - drawing_pos_y;
       ctx.beginPath();
-      ctx.moveTo(this.width / 2 - bias, mirrored_text_y);
-      ctx.lineTo(this.width / 2, mirrored_text_y);
+      ctx.moveTo(0 - bias / size_, 0);
+      ctx.lineTo(0, 0);
       ctx.stroke();
-      ctx.fillText(label_number_txt, text_x, mirrored_text_y);
+
+      // 라벨 출력
+      const tmp_up_mat = mat_upSide.scale(1 / size_, -1 / size_);
+      ctx.setTransform(tmp_up_mat);
+      ctx.fillText(label_number_txt, - bias / size_, 0);
     }
 
     ctx.restore();

@@ -6,8 +6,7 @@ import InitTransformControls from "./ui/transform-controls.js";
 function Initialize() {
   const canvas_wrapper = document.getElementsByClassName("canvas-wrapper")[0];
   const canvas = document.getElementById('transformation-canvas')
-  
-  console.log(canvas_wrapper);
+
 
   canvas.width = canvas_wrapper.clientWidth;
   canvas.height = canvas_wrapper.clientHeight;
@@ -31,6 +30,7 @@ function Initialize() {
   InitTransformControls(model_0, Render);
 
   function Render() {
+    ctx.save();
     ctx.fillStyle = "#F3CFCF";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -45,12 +45,19 @@ function Initialize() {
     // 이제 canvas 중앙이 (0,0)이 되도록 만들어야 한다.
     // canvas의 가로 및 세로 길이의 절반만큼 수평이동한다.
     mat.translateSelf(canvas.offsetWidth / 2, canvas.offsetHeight / 2);
-    ctx.save();
+    let zoom = 1
+    if (canvas.width < 700 || canvas.height < 750) {
+      // 모바일 대응
+      // 기본 단위 벡터의 길이를 절반으로 설정하여 시야각을 넓힌다.
+      zoom = 0.5;
+    }
 
-    axis.On_ScreenSizeChanged(canvas.width, canvas.height);
+    mat.scaleSelf(zoom, zoom);
+    const org_matrix = new DOMMatrix(mat);
+
+    axis.On_ScreenSizeChanged(canvas.width, canvas.height, org_matrix);
     axis.Render(ctx);
 
-    const org_matrix = new DOMMatrix(mat);
     model_0.UpdateTransformMatrix(mat, org_matrix);
     model_0.Render(ctx);
     // model_0.GetPoints();
@@ -58,6 +65,7 @@ function Initialize() {
     ctx.restore();
   }
 }
+
 
 Initialize();
 

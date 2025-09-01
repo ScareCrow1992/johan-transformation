@@ -42,6 +42,4 @@ export default class Rect{
     
     ctx.restore();
   }
-
-
 }
