@@ -17,3 +17,8 @@ https://scarecrow1992.github.io/johan-transformation/
 또는
 
 VSC로 프로젝트를 연후 index.html 파일을 라이브서버로 열어주세요!
+
+
+# 수정 내역
+- 25.9.1 (월)
+  - 휴대폰 가로화면 해상도 대응 (화면 높이 750px 미만)
