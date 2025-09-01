@@ -4,9 +4,13 @@ import InitTransformControls from "./ui/transform-controls.js";
 
 
 function Initialize() {
+  const canvas_wrapper = document.getElementsByClassName("canvas-wrapper")[0];
   const canvas = document.getElementById('transformation-canvas')
-  canvas.width = canvas.offsetWidth;
-  canvas.height = canvas.offsetHeight;
+  
+  console.log(canvas_wrapper);
+
+  canvas.width = canvas_wrapper.clientWidth;
+  canvas.height = canvas_wrapper.clientHeight;
 
   const ctx = canvas.getContext('2d');
 
@@ -14,9 +18,11 @@ function Initialize() {
   const model_0 = new Model("gray", rect_width, 0, 0, 0, 0, 0);
   const axis = new MainAxis();
   window.addEventListener('resize', (event) => {
-    // console.log(event);
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    // 여기서 딜레이가 발생하나?
+    canvas.width = canvas_wrapper.clientWidth;
+    canvas.height = canvas_wrapper.clientHeight;
+    // canvas.width = canvas.offsetWidth;
+    // canvas.height = canvas.offsetHeight;
     Render();
   })
 
