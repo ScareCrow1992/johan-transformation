@@ -36,11 +36,9 @@ export default class Model{
   }
 
 
-  // canvas_center_mat 캔버스 중앙을 원점삼는 배열
   GetPoints(){
     // canvas 중앙에 대한 model의 transform 행렬
     let mat = this.transform.matrix_by_org;
-
     const width = this.shape.GetWidth();
 
     const point_LB = new DOMPoint(0, 0);  // 좌측 하단
@@ -48,7 +46,7 @@ export default class Model{
     const point_LT = new DOMPoint(0, width);  // 좌측 상단
     const point_RT = new DOMPoint(width, width);  // 우측 상단
 
-    // 각 꼭지점에 대해 행렬곱을 수행하여, 좌표를 획득한다.
+    // 각 꼭짓점의 기본좌표에 행렬곱을 수행하여, 좌표를 획득한다.
     const local_point_LB = mat.transformPoint(point_LB);
     const local_point_RB = mat.transformPoint(point_RB);
     const local_point_LT = mat.transformPoint(point_LT);
