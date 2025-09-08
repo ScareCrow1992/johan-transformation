@@ -1,9 +1,9 @@
 # 소개
 ![screenshot](./public/preview.png)
 
-`Transform`은 오브젝트의 위치(Position), 회전(Rotation), 크기(Scale)을 결정하는 컴포넌트이며,
+`Transform`은 오브젝트의 위치(Position), 회전(Rotation), 크기(Scale)을 결정하는 컴포넌트입니다.
 
-`unity`, `unreal` 을 비롯한 사용엔진은 `Transform`을 통해 게임오브젝트의 공간적 속성을 정의하며, 부모자식 관계를 관리합니다,
+`unity`, `unreal`과 같은 3D엔진들은 `Transform`을 통해 게임오브젝트의 공간적 속성을 정의하며, 부모자식 관계를 관리합니다.
 
 `Three.js`의 경우 `Mesh` 오브젝트의 `add` 메서드로 부모-자식 관계의 관리를 자체적으로 제공해주지만,
 
