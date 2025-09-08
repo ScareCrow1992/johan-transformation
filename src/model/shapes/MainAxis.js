@@ -3,28 +3,21 @@
 export default class MainAxis {
 
   constructor() {
-    // this.axis_x = new Axis();
-    // this.axis_y = new Axis();
     this.axis_x = new Axis_X();
     this.axis_y = new Axis_Y();
   }
 
-  On_ScreenSizeChanged(width, height, org_matrix) {
+  UpdateDatas(width, height, org_matrix) {
     this.center_x = width / 2;
     this.center_y = height / 2;
 
-    // console.log(new DOMMatrix(org_matrix).transformPoint(new DOMPoint(1, 0)));
 
     this.axis_x.SetScreenData(width, height, new DOMMatrix(org_matrix));
     this.axis_y.SetScreenData(width, height, new DOMMatrix(org_matrix));
 
-    // this.axis_x.SetRange(new Point(0, this.center_y), new Point(width, this.center_y));
-    // this.axis_y.SetRange(new Point(this.center_x, height), new Point(this.center_x, 0));
-
   }
 
   Render(ctx) {
-    // const center_x = ctx.
     ctx.save();
 
     ctx.fillStyle = "black";
@@ -36,8 +29,6 @@ export default class MainAxis {
 
     this.axis_x.Render(ctx);
     this.axis_y.Render(ctx);
-    // this.axis_x.Render(ctx);
-    // this.axis_y.Render(ctx);
 
     ctx.restore();
   }
@@ -98,15 +89,12 @@ class Axis_X {
 
     let drawing_pos_x = this.width / 2 / size_;
     let label_number = 0;
-    // console.log(size_x);
-    // console.log(this.org_matrix);
 
     while (drawing_pos_x < this.width / size_) {
       drawing_pos_x += this.unit_length;
       label_number += this.unit_length;
       const label_number_txt = label_number.toString();
 
-      // console.log(this.org_matrix);
 
       let textWidth = ctx.measureText(label_number_txt).width;
       let textHeight = ctx.measureText(label_number_txt).actualBoundingBoxAscent +
@@ -121,8 +109,6 @@ class Axis_X {
       ctx.moveTo(0, 0);
       ctx.lineTo(0, -bias / size_);
       ctx.stroke();
-      // const text_x = drawing_pos_x;
-      // const text_y = this.height / 2 + 2 * textHeight;
 
       // 라벨 출력
       const tmp_mat = mat_rightSide.scale(1 / size_, -1 / size_);
@@ -145,13 +131,6 @@ class Axis_X {
       ctx.setTransform(tmp_left_mat);
       ctx.fillText(-label_number_txt, 0, bias / size_ + textHeight);
 
-
-      // const mirrored_text_x = this.width - text_x;
-      // ctx.beginPath();
-      // ctx.moveTo(mirrored_text_x, this.height / 2);
-      // ctx.lineTo(mirrored_text_x, this.height / 2 - bias);
-      // ctx.stroke();
-      // ctx.fillText((-label_number).toString(), mirrored_text_x, text_y);
     }
 
 

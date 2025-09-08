@@ -17,11 +17,8 @@ function Initialize() {
   const model_0 = new Model("gray", rect_width, 0, 0, 0, 0, 0);
   const axis = new MainAxis();
   window.addEventListener('resize', (event) => {
-    // 여기서 딜레이가 발생하나?
     canvas.width = canvas_wrapper.clientWidth;
     canvas.height = canvas_wrapper.clientHeight;
-    // canvas.width = canvas.offsetWidth;
-    // canvas.height = canvas.offsetHeight;
     Render();
   })
 
@@ -30,7 +27,6 @@ function Initialize() {
   InitTransformControls(model_0, Render);
 
   function Render() {
-    ctx.save();
     ctx.fillStyle = "#F3CFCF";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -48,14 +44,15 @@ function Initialize() {
     let zoom = 1
     if (canvas.width < 700 || canvas.height < 750) {
       // 모바일 대응
-      // 기본 단위 벡터의 길이를 절반으로 설정하여 시야각을 넓힌다.
+      // 기본 단위 벡터의 길이를 절반으로 설정하여 시야범위를 넓힌다.
       zoom = 0.5;
     }
 
     mat.scaleSelf(zoom, zoom);
     const org_matrix = new DOMMatrix(mat);
 
-    axis.On_ScreenSizeChanged(canvas.width, canvas.height, org_matrix);
+    ctx.save();
+    axis.UpdateDatas(canvas.width, canvas.height, org_matrix);
     axis.Render(ctx);
 
     model_0.UpdateTransformMatrix(mat, org_matrix);

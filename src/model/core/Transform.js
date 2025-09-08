@@ -56,6 +56,10 @@ export default class Transform {
     tmp_mat.translateSelf(-this.pivot.x, -this.pivot.y);
     this.matrix = new DOMMatrix(tmp_mat);
 
+
+    // tmp_org_matrix : world matrix
+    // this.matrix : canvas matrix에 대한 사각형의 transform matrix
+    // this.matrix_by_org : world matrix에 대한 사각형의 transform matrix
     const tmp_org_matrix = new DOMMatrix(org_matrix);
     this.matrix_by_org = tmp_org_matrix.invertSelf().multiply(this.matrix);
 
