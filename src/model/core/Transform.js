@@ -57,7 +57,7 @@ export default class Transform {
     this.matrix = new DOMMatrix(tmp_mat);
 
 
-    // tmp_org_matrix : world matrix
+    // tmp_org_matrix : world matrix (html canvas의 윈본 좌표계 기준)
     // this.matrix : canvas matrix에 대한 사각형의 transform matrix
     // this.matrix_by_org : world matrix에 대한 사각형의 transform matrix
     const tmp_org_matrix = new DOMMatrix(org_matrix);
