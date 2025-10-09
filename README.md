@@ -9,7 +9,8 @@
 
 성능향상을 위해 `InstancedMesh`을 도입해야할 경우, `Herarchy System`을 직접 구현해야만 합니다.
 
-즉, Web3d 엔진을 위해선 복잡한 계층구조를 자체적으로 관리할 수 있는 `Scene Graph`기반의 `Transform`시스템을 구현하는것입니다.
+즉, `Scene Graph`기반의 `Transform`시스템 구현은 `Web3d 엔진` 개발에서 제일 중요한 요소입니다.
+(복잡한 계층구조를 자체적으로 관리하기 위해)
 
 본 프로젝트는 `HTML 2D Canvas`의 `CanvasRenderingContext2D: setTransform()`을 활용한 좌표변환 기술을 통해 간단한 2d transform을 구현하기 위해 진행되었습니다.
 
